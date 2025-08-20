@@ -78,3 +78,6 @@ node_modules/
 *.pt
 *.pth
 *.ckpt
+lm-evaluation-harness/lm_eval/local_data/livecodebench/stdin.json
+lm-evaluation-harness/lm_eval/local_data/livecodebench/func.json
+lm-evaluation-harness/lm_eval/local_data/livecodebench/test6.jsonl
