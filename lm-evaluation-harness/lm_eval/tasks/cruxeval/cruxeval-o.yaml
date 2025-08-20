@@ -1,0 +1,24 @@
+task: cruxeval_output
+dataset_path: cruxeval-org/cruxeval
+test_split: test
+output_type: generate_until
+doc_to_text: |
+  You are given a Python function and an assertion containing an input to the function. Complete the assertion with a literal (no unsimplified expressions, no function calls) containing the output when executing the provided code on the given input, even if the function is incorrect or incomplete. In [ANSWER] and [/ANSWER] tags, complete the assertion with the correct output that will result from executing the function.
+  [PYTHON]
+  {{code}}
+  assert f({{input}}) == ??
+  [/PYTHON]
+doc_to_target: "PASSED"
+process_results: !function utils.process_output_pred_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - "<|endoftext|>"
+  do_sample: false
+  temperature: 0.2
+  max_gen_toks: 4096
+metadata:
+  version: 1.0

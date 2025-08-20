@@ -1,0 +1,10 @@
+include: _default_mbpp_yaml
+task: mbpp_sanitized
+dataset_name: sanitized
+doc_to_text: "{{prompt if prompt is defined else text}} Your code should satisfy the following assertion:\n{{test_list[0]}}\n\nProvide ONLY the Python code without any explanation:"
+doc_to_target: "{{test_list[0]}}"
+num_fewshot: 0
+generation_kwargs:
+  max_gen_toks: 4096
+  do_sample: false
+  until: "<|endoftext|>"

@@ -1,0 +1,18 @@
+dataset_path: Muennighoff/mbpp
+output_type: generate_until
+test_split: test
+unsafe_code: true
+doc_to_target: "{{test_list[0]}}\n{{test_list[1]}}\n{{test_list[2]}}"
+target_delimiter: ""
+metric_list:
+  - metric: !function utils.pass_at_1
+    aggregation: mean
+    higher_is_better: true
+filter_list:
+  - name: "extract_code"
+    filter:
+      - function: "custom"
+        filter_fn: !function utils.build_predictions
+num_fewshot: 0
+metadata:
+  version: 2.0

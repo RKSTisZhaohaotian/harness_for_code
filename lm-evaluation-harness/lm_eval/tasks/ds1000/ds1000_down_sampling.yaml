@@ -1,0 +1,145 @@
+task: ds1000_down_sampling
+dataset_path: xlangai/DS-1000
+test_split: test
+output_type: generate_until
+# 添加数据集处理函数，随机采样100条数据
+process_docs: !function utils.random_sample_docs
+doc_to_text: |
+  Write a short code following the given format and indentation. Below are some reference problems and their outputs. Please refer to their output format to solve the final problem. Please pay special attention to:
+  1. You need to continue writing the solution code, not the entire code.
+  2. You only need to directly output the continued code, not the original code.
+  3. You need to continue writing code with correct indentation.
+
+  Problem:
+
+  I want to get a coefficient of a specific term of an expression.
+  For example, with expression `x**3 + a*x**2 - b`, the coefficient of `x**2` is `a`
+  I have the expression in sympy.Poly format. How can I get the correct coefficient?
+  A:
+  <code>
+  import sympy as sp
+  x, a, b = sp.symbols("x,a,b")
+  example_expr = x**3 + a*x**2 - b
+  example_monomial = x**2
+  def f(expr = example_expr, monomial = example_monomial):
+      # return the solution in this function
+      # result = f(expr, monomial)
+      ### BEGIN SOLUTION
+
+  Output:
+  ```python
+      result = expr.coeff(expr, monomial)
+      return result
+  ```
+
+  Problem:
+
+  How to create vector of symbolic variables in sympy?
+  I want to multiply a vector of symbols times it's transpose (outer product in another word).
+  I checked with sympy documentation, but couldn't figure out.
+  Any suggestions?
+  A:
+  <code>
+  import sympy as sp
+  xs = [sp.symbols('x' + str(i)) for i in range(3)]
+  </code>
+  result = ... # put solution in this variable
+  BEGIN SOLUTION
+  <code>
+
+  Output:
+  ```python
+  A = sp.Matrix([xs])
+  B = sp.Transpose(A) * A
+  result = B
+  ```
+
+  Problem:
+
+  import cv2
+  import numpy as np
+
+  images = []
+  for i in range(255):
+      images.append(np.full((128, 128), i, dtype=np.uint8))
+
+  # show images using cv2 which animated 5 frames per second
+  # SOLUTION START
+
+  Output:
+  ```python
+  for image in images:
+      cv2.imshow('image', image)
+      cv2.waitKey(200)
+  ```
+
+  Problem:
+
+  How do you get/extract the points that define a shapely polygon? Thanks!
+  I want to get points in `[(y1, x1), (y2, x2), ...]` format.
+  A:
+  <code>
+  from shapely.geometry import Polygon
+
+  # Create polygon from lists of points
+  x = [0.0, 0.0, 1.0, 1.0, 0.0]
+  y = [0.0, 1.0, 1.0, 0.0, 0.0]
+  poly = Polygon(zip(x,y))
+  def get_points(poly=poly):
+      # return the solution in this function
+      # result = get_points(poly)
+      ### BEGIN SOLUTION
+
+  Output:
+  ```python
+      points = list(poly.exterior.coords)
+      return [(y, x) for x, y in points]
+  ```
+
+  Problem:
+
+  I want to calculate the overlapped area between two rectangles.
+  Each rectangle is defined by its four corner coordinates. The resulted unit of the overlapped area is unit square.
+  I could not imagine how can I do it?
+  Any creative comments would be appreciated.
+  A:
+  <code>
+  from shapely.geometry import Polygon
+  polygon = Polygon([(3, 3), (5, 3), (5, 5), (3, 5)])
+  other_polygon = Polygon([(1, 1), (4, 1), (4, 3.5), (1, 3.5)])
+  </code>
+  area = ... # put solution in this variable
+  BEGIN SOLUTION
+  <code>
+
+  Output:
+  ```python
+  intersection = polygon.intersection(other_polygon)
+  area = intersection.area
+  ```
+
+  {{prompt}}
+
+  
+
+doc_to_target: "{{reference_code}}```"
+target_delimiter: ""
+filter_list:
+  - name: "extract_code"
+    filter:
+      - function: "custom"
+        filter_fn: !function utils.build_predictions
+process_results: !function utils.process_results
+metric_list:
+  - metric: pass_at_1_custom
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until: '<|endoftext|>'
+  do_sample: false
+  temperature: 0.0
+  max_gen_toks: 4096
+num_fewshot: 0
+metadata:
+  version: 1.0
+  description: "DS1000 with random sampling of 100 examples"
