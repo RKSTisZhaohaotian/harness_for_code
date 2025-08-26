@@ -1,0 +1,10 @@
+group: cceval
+task:
+  - cceval_python_rg1_unixcoder
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+  - metric: edit_similarity
+    aggregation: mean
+  - metric: codebleu
+    aggregation: mean

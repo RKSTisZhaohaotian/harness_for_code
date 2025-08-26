@@ -1,0 +1,12 @@
+group: repobench
+task:
+  - repobench_cross_file_first
+  - repobench_cross_file_random  
+  - repobench_in_file
+aggregate_metric_list:
+  - metric: exact_match
+    aggregation: mean
+  - metric: edit_similarity
+    aggregation: mean
+  - metric: codebleu
+    aggregation: mean
