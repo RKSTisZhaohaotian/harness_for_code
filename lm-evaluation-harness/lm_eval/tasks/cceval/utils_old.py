@@ -357,22 +357,10 @@ def process_results(doc: Dict, results: List[str]) -> Dict[str, float]:
             "codebleu": 0.0
         }
     
-    # Determine language from the task metadata or file path
-    # Default to python if not specified
-    language = "python"
-    if "metadata" in doc and "file" in doc["metadata"]:
-        file_path = doc["metadata"]["file"]
-        if file_path.endswith(".java"):
-            language = "java"
-        elif file_path.endswith(".cs"):
-            language = "java"  # C# uses same comment syntax as Java
-        elif file_path.endswith(".ts") or file_path.endswith(".js"):
-            language = "java"  # TypeScript/JavaScript use same comment syntax as Java
-    
     # Extract the first line from generated text (similar to RepoBench approach)
     prediction = results[0].strip()
     if prediction:
-        prediction = get_first_line_not_comment(prediction, language=language)
+        prediction = get_first_line_not_comment(prediction, language="python")
     else:
         prediction = ""
     
@@ -384,7 +372,7 @@ def process_results(doc: Dict, results: List[str]) -> Dict[str, float]:
     
     # For codebleu, we need lists
     try:
-        cb_score = codebleu_score([prediction], [ground_truth], language=language)
+        cb_score = codebleu_score([prediction], [ground_truth], language="python")
     except Exception as e:
         print(f"CodeBLEU calculation failed in process_results: {e}")
         cb_score = 0.0

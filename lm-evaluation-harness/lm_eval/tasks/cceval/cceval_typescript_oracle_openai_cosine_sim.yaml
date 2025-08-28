@@ -1,13 +1,13 @@
-task: cceval_python_rg1_unixcoder_fixed
+task: cceval_typescript_oracle_openai_cosine_sim
 dataset_path: json
 dataset_name: jsonl
 dataset_kwargs:
   data_files:
-    test: /Users/tanjingyu/Desktop/projects/LLM_eval/harness_eval/cceval/data/crosscodeeval_data/python/line_completion_rg1_unixcoder_cosine_sim.jsonl
+    test: data/cceval/crosscodeeval_data/typescript/line_completion_oracle_openai_cosine_sim.jsonl
 process_docs: !function utils.setup_api_and_process_docs
 doc_to_text: !function utils.doc_to_text
 generation_kwargs:
-  until: ["\n", "\n\n"]  # Removed empty string "" which caused the model to return empty responses
+  until: ["\n", "\n\n"]
   do_sample: false
   temperature: 0.0
   max_gen_toks: 4096
