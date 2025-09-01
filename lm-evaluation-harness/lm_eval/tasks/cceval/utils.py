@@ -6,6 +6,8 @@ from typing import Dict, List, Tuple
 from collections import Counter
 from datasets import load_dataset
 from fuzzywuzzy import fuzz
+import random
+import numpy as np
 
 # Set API key environment variable for lm-evaluation-harness
 if 'BAIDU_INT_API_KEY' in os.environ:
@@ -394,3 +396,36 @@ def process_results(doc: Dict, results: List[str]) -> Dict[str, float]:
         "edit_similarity": es_score, 
         "codebleu": cb_score
     }
+
+def random_sample_docs(dataset, sample_size=200, seed=42):
+    """
+    从数据集中随机采样指定数量的样本
+    
+    Args:
+        dataset: 原始数据集
+        sample_size: 采样数量，默认100
+        seed: 随机种子，保证结果可重现
+    
+    Returns:
+        采样后的数据集
+    """
+    # 设置随机种子保证结果可重现
+    random.seed(seed)
+    np.random.seed(seed)
+    
+    # 获取数据集总长度
+    total_size = len(dataset)
+    
+    if total_size <= sample_size:
+        # 如果数据集本身就不够大，直接返回原数据集
+        return dataset
+    
+    # 随机选择索引
+    sampled_indices = random.sample(range(total_size), sample_size)
+    sampled_indices.sort()  # 排序以保持某种顺序
+    
+    # 创建采样后的数据集
+    sampled_dataset = dataset.select(sampled_indices)
+    
+    print(f"从 {total_size} 条数据中随机采样了 {len(sampled_dataset)} 条数据")
+    return sampled_dataset
