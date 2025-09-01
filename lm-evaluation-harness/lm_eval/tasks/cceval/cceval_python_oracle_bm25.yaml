@@ -3,11 +3,12 @@ dataset_path: json
 dataset_name: jsonl
 dataset_kwargs:
   data_files:
-    test: data/cceval/crosscodeeval_data/python/line_completion_oracle_bm25.jsonl
+    test: lm-evaluation-harness/lm_eval/local_data/cceval/python/line_completion_oracle_bm25.jsonl
 process_docs: !function utils.setup_api_and_process_docs
 doc_to_text: !function utils.doc_to_text
 generation_kwargs:
-  until: ["\n", "\n\n"]
+  until:
+    - "<|endoftext|>"
   do_sample: false
   temperature: 0.0
   max_gen_toks: 4096
