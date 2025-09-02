@@ -1,13 +1,13 @@
-task: cceval_python_rg1_bm25
+task: cceval_python_rg1_bm25_down_sampling_200
 dataset_path: json
 dataset_name: jsonl
 dataset_kwargs:
   data_files:
-    test: data/cceval/crosscodeeval_data/python/line_completion_rg1_bm25.jsonl
-process_docs: !function utils.setup_api_and_process_docs
+    test: lm-evaluation-harness/lm_eval/local_data/cceval/python/line_completion_rg1_bm25.jsonl
+process_docs: !function utils.random_sample_docs
 doc_to_text: !function utils.doc_to_text
 generation_kwargs:
-  until: ["\n", "\n\n"]
+  until: '<|endoftext|>'
   do_sample: false
   temperature: 0.0
   max_gen_toks: 4096
