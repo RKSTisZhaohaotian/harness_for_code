@@ -1,0 +1,19 @@
+task: bigcode_bench
+dataset_path: bigcode/bigcodebench
+output_type: generate_until
+test_split: v0.1.2
+doc_to_text: "{{instruct_prompt.strip()}}\n{{complete_prompt.strip()}}"
+doc_to_target: canonical_solution
+process_results: !function utils.process_results
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+generation_kwargs:
+  until:
+    - "<|endoftext|>"
+  do_sample: false
+  temperature: 0.2
+  max_gen_toks: 4096
+metadata:
+  version: 1.0
